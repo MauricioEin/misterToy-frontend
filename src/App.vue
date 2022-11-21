@@ -1,6 +1,17 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import userMsg from './cmps/user-msg.cmp.vue'
+
+export default {
+  created() {
+    this.$store.dispatch({ type: 'loadToys' })
+  },
+  components: {
+    HelloWorld,
+    userMsg
+  }
+}
 </script>
 
 <template>
@@ -13,6 +24,7 @@ import HelloWorld from './components/HelloWorld.vue'
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/toy">Toys</RouterLink>
       </nav>
     </div>
   </header>
