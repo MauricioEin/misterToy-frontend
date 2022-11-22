@@ -1,10 +1,5 @@
 <template>
   <main>
-    THIS IS THE APP
-    <RouterLink to="/toy/edit">ADD</RouterLink><br>
-    <RouterLink to="/toy/123">DETAILS</RouterLink>
-    THIS IS THE APP
-
     <section class="container">
       <toy-filter :toys="toys" @setFilterBy="setFilterBy" @setSortBy="setSortBy"></toy-filter>
       <router-link to="toy/edit/" class="btn m-b-s">Add Toy</router-link>

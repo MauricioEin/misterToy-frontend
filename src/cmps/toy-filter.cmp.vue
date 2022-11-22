@@ -20,6 +20,7 @@
             <span>{{ arrow }}</span></label>
     </section>
 </template>
+
 <script>
 import { utilService } from '../services/util.service.js'
 export default {

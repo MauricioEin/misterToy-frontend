@@ -1,17 +1,21 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
+import { httpService } from './http.service.js'
+
+
 
 const TOY_KEY = 'toy-list'
 
 function query() {
-    return storageService.queryWithDelay(TOY_KEY).then((toys) => {
-        // console.log('toys:', toys)
-        if (!toys || !toys.length) {
-            toys = _createToys()
-            storageService.postMany(TOY_KEY, toys)
-        }
-        return toys
-    })
+    return httpService.get('toy')
+    // .then((toys) => {
+    //     // console.log('toys:', toys)
+    //     if (!toys || !toys.length) {
+    //         toys = _createToys()
+    //         storageService.postMany(TOY_KEY, toys)
+    //     }
+    //     return toys
+    // })
 }
 
 function save(toy) {
@@ -20,23 +24,27 @@ function save(toy) {
 
 function _add(addedToy) {
     const newToy = _createToy(addedToy.name)
-    return storageService.post(TOY_KEY, newToy)
+    return httpService.post('toy', newToy)
+    // return storageService.post(TOY_KEY, newToy)
 }
 
 function _update(updatedToy) {
     updatedToy.modifiedAt = Date.now()
-    return storageService.put(TOY_KEY, updatedToy)
+    return httpService.put('toy/' + updatedToy._id, updatedToy)
+    // return storageService.put(TOY_KEY, updatedToy)
 }
 
 function remove(toyId) {
-    return storageService.remove(TOY_KEY, toyId)
+    return httpService.delete('toy/' + toyId)
+    // return storageService.remove(TOY_KEY, toyId)
 }
 
 function getById(toyId) {
-    return storageService.get(TOY_KEY, toyId).then(toy => {
-        toy.reviews = ['It\'s Just Wonderful!', 'My daoughter hated it.', 'I cannot stop playing']
-        return toy
-    })
+    return httpService.get('toy/' + toyId)
+    // return storageService.get(TOY_KEY, toyId).then(toy => {
+    //     toy.reviews = ['It\'s Just Wonderful!', 'My doughter hated it.', 'I cannot stop playing']
+    //     return toy
+    // })
 }
 
 export default {
@@ -52,11 +60,11 @@ function _createToys() {
 
 function _createToy(name,) {
     return {
-        _id: utilService.makeId(),
+        // _id: utilService.makeId(),
         name,
         price: 140,
-        inStock: true,
-        createdAt: Date.now(),
+        // inStock: true,
+        // createdAt: Date.now(),
         labels: ['Doll', 'Battery Powered', 'Baby']
     }
 }

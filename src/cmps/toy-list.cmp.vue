@@ -1,8 +1,6 @@
 
 
 <template>
-    <h1>LIST CONTAINER</h1>
-
     <section class="toy-list-container">
         
         <ul class="toy-list clean-list ">
