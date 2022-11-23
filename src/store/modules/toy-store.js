@@ -1,39 +1,37 @@
 import toyService from '../../services/toy.service.js'
+import statService from '../../services/stat.service.js'
 
-const PAGE_SIZE = 3
 
 export default {
   state: {
     toys: null,
-    filterBy: { status: 'All', name: '', page: 0 },
-    sortBy: null,
+    filterBy: { status: 'All', name: '', page: 0, pageSize: 3 },
+    sortBy: { val: 'name', isAsc: true },
+    totalPages: 0,
+    labels: []
+
   },
   getters: {
     toysForDisplay(state) {
-      const asc = state.sortBy?.isAsc ? -1 : 1
-      let filteredToys
-      if (!state.filterBy.name && state.filterBy.status === 'All') filteredToys = JSON.parse(JSON.stringify(state.toys))
-      else {
-        if (state.filterBy.status === 'In stock') {
-          filteredToys = state.toys.filter((toy) => toy.inStock)
-        } else if (state.filterBy.status === 'Out of stock') {
-          filteredToys = state.toys.filter((toy) => !toy.inStock)
-        } else {
-          filteredToys = state.toys
-        }
-        filteredToys = filteredToys.filter((toy) => new RegExp(state.filterBy.name, 'i').test(toy.name))
-      }
-      // PAGING
-      let startIdx = state.filterBy.page * PAGE_SIZE
-      let endIdx = startIdx + PAGE_SIZE
-
-      const sortBy = state.sortBy?.val
-      return filteredToys?.slice(startIdx, endIdx).sort((t1, t2) => (t1[sortBy] > t2[sortBy] ? 1 * asc : -1 * asc))
+      return JSON.parse(JSON.stringify(state.toys))
     },
+    totalPages(state) {
+      return state.totalPages
+    },
+    currPage(state) {
+      return state.filterBy.page
+    },
+    labels(state) {
+      return state.labels
+    }
   },
   mutations: {
-    setToys(state, toys) {
+    setToys(state, { totalPages, filteredToys: toys }) {
       state.toys = toys
+      state.totalPages = totalPages
+    },
+    setLabels(state, labels) {
+      state.labels = labels
     },
     updateToy({ toys }, { toy }) {
       const idx = toys.findIndex((_toy) => _toy._id === toy._id)
@@ -48,22 +46,14 @@ export default {
       toys.push(toy)
     },
     setFilterBy(state, { filterBy }) {
-      state.filterBy = { ...state.filterBy, ...filterBy }
-      console.log(state.filterBy)
+      state.filterBy = { ...state.filterBy, ...filterBy, page: 0 }
+
     },
     setSortBy(state, { sortBy }) {
       state.sortBy = sortBy
     },
     setPage(state, { diff }) {
-      const toyLength = state.toys?.length
-      let maxPage = toyLength / PAGE_SIZE
-      if (Number.isInteger(toyLength / PAGE_SIZE)) maxPage--
-      else maxPage = Math.floor(maxPage)
-
-      let page = state.filterBy.page + diff
-      if (page < 0) state.filterBy.page = maxPage
-      else if (page > maxPage) state.filterBy.page = 0
-      else state.filterBy.page = page
+      state.filterBy.page = (state.filterBy.page + state.totalPages + diff) % state.totalPages
     },
     removeToy({ toys }, { toyId }) {
       const idx = toys.findIndex((toy) => toy._id === toyId)
@@ -75,9 +65,16 @@ export default {
     },
   },
   actions: {
-    loadToys({ commit }) {
-      toyService.query().then((toys) => {
-        commit('setToys', toys)
+    loadToys({ commit, state }) {
+      toyService.query(state.filterBy, state.sortBy).then((toysAndPages) => {
+        commit('setToys', toysAndPages)
+      })
+    },
+    loadLabels({ commit }) {
+      toyService.getLabels().then(labels => {
+        commit('setLabels', labels)
+        statService.getAvgLabelPrice()
+        statService.getInStockByLabel()
       })
     },
     saveToy({ commit }, { toy }) {
@@ -85,8 +82,6 @@ export default {
       const isEdit = toy._id
       return toyService.save(toy).then((toy) => {
         const type = isEdit ? 'updateToy' : 'addToy'
-        // if (isEdit) commit({ type: 'updateToy', toy })
-        // else commit({ type: 'addToy', toy })
         commit({ type, toy })
       })
     },
@@ -97,9 +92,7 @@ export default {
         // dispatch({ type: 'setUserActivities', txt: 'Toy was removed', toy: removedToy })
       })
     },
-
     getToyById(context, { toyId }) {
-      console.log(context)
       return toyService.getById(toyId)
     },
   },

@@ -4,11 +4,11 @@
       <toy-filter :toys="toys" @setFilterBy="setFilterBy" @setSortBy="setSortBy"></toy-filter>
       <router-link to="toy/edit/" class="btn m-b-s">Add Toy</router-link>
       <div class="paging flex align-center space-between m-b-s">
-        <button @click="setPage(-1)">Prev</button>
-        <button @click="setPage(1)">Next</button>
+        <p> Page {{ currPage }} of {{ totalPages }} </p>
+        <button @click="setPage(-1)" v-if="currPage > 1">Prev</button>
+        <button @click="setPage(1)" v-if="currPage < totalPages">Next</button>
       </div>
-      <toy-list v-if="toys && toys.length" :toys="toys" @toggleToyState="toggleToyState"
-        @removeToy="removeToy">
+      <toy-list v-if="toys && toys.length" :toys="toys" @toggleToyState="toggleToyState" @removeToy="removeToy">
       </toy-list>
       <h2 v-else-if="toys" class="indicator">No matches found</h2>
       <!-- <h2 class="indicator" v-else >Loading...</h2> -->
@@ -25,6 +25,13 @@ export default {
     toys() {
       return this.$store.getters.toysForDisplay
     },
+    totalPages() {
+      return this.$store.getters.totalPages
+    },
+    currPage() {
+      return this.$store.getters.currPage + 1
+
+    }
   },
   methods: {
     toggleToyState(toy) {
@@ -49,12 +56,14 @@ export default {
         type: 'setFilterBy',
         filterBy,
       })
+      this.$store.dispatch({ type: 'loadToys' })
     },
     setSortBy(sortBy) {
       this.$store.commit({
         type: 'setSortBy',
         sortBy,
       })
+      this.$store.dispatch({ type: 'loadToys'})
     },
     removeToy(toyId) {
       this.$store
@@ -69,6 +78,8 @@ export default {
     },
     setPage(diff) {
       this.$store.commit({ type: 'setPage', diff })
+      this.$store.dispatch({ type: 'loadToys' })
+
     },
   },
   components: {

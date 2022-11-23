@@ -4,18 +4,12 @@ import { httpService } from './http.service.js'
 
 
 
-const TOY_KEY = 'toy-list'
+function query(filterBy, sortBy) {
+    return httpService.get('toy', { filterBy, sortBy })
+}
 
-function query() {
-    return httpService.get('toy')
-    // .then((toys) => {
-    //     // console.log('toys:', toys)
-    //     if (!toys || !toys.length) {
-    //         toys = _createToys()
-    //         storageService.postMany(TOY_KEY, toys)
-    //     }
-    //     return toys
-    // })
+function getLabels(){
+    return httpService.get('label')
 }
 
 function save(toy) {
@@ -23,14 +17,14 @@ function save(toy) {
 }
 
 function _add(addedToy) {
-    const newToy = _createToy(addedToy.name)
+    const newToy = _createToy(addedToy.name, addedToy.price)
     return httpService.post('toy', newToy)
     // return storageService.post(TOY_KEY, newToy)
 }
 
 function _update(updatedToy) {
     updatedToy.modifiedAt = Date.now()
-    return httpService.put('toy/' + updatedToy._id, updatedToy)
+    return httpService.put('toy', updatedToy)
     // return storageService.put(TOY_KEY, updatedToy)
 }
 
@@ -52,17 +46,18 @@ export default {
     getById,
     save,
     remove,
+    getLabels,
 }
 
 function _createToys() {
     return [_createToy('Talking Doll'), _createToy('Mr. Potato'), _createToy('Mrs. Potato'), _createToy('Beach Ball'), _createToy('Furby'), _createToy('Gameboy Color')]
 }
 
-function _createToy(name,) {
+function _createToy(name, price) {
     return {
         // _id: utilService.makeId(),
         name,
-        price: 140,
+        price,
         // inStock: true,
         // createdAt: Date.now(),
         labels: ['Doll', 'Battery Powered', 'Baby']

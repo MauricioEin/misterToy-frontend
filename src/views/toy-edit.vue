@@ -1,10 +1,13 @@
 <template>
   <section class="toy-edit-container">
-    <h1 class="toy-edit-header padding-m-y">TOY EDIT</h1>
-    <form @submit.stop="save(updatedToy)">
+    <h1 class="toy-edit-header padding-m-y">{{title}}</h1>
+    <form @submit.prevent="save(updatedToy)">
       <label class="m-b-m">
-        Title
+        Name
         <input type="text" v-model="updatedToy.name" />
+      </label><br>
+      <label class="m-b-m">
+        Price <input type="number" v-model="updatedToy.price" />
       </label>
       <div class="btns flex align-center">
         <button class="edit-save-btn btn">Save</button>
@@ -22,11 +25,17 @@ export default {
       updatedToy: {
         name: '',
         toyId: null,
+        price: 100,
       },
     }
   },
   created() {
     this.getToyById()
+  },
+  computed: {
+    title() {
+      return this.updatedToy._id ? 'TOY EDIT' : 'ADD A TOY'
+    }
   },
   methods: {
     getToyById() {
@@ -38,7 +47,6 @@ export default {
         })
       }
     },
-
     save(toy) {
       const action = toy._id ? 'updated' : 'added'
       this.$store

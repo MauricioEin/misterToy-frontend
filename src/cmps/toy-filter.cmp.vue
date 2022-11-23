@@ -6,9 +6,6 @@
         <input type="text" v-model="filterBy.name" @input="setFilterBy" />
         <select v-model="filterBy.status" @change="setFilterBy">
             <option v-for="option in options" :key="option">{{ option }}</option>
-            <!-- <option value="All">All</option>
-            <option value="Active">Active</option>
-            <option value="Done">Done</option> -->
         </select>
         <select name="test">
             <option>123</option>
@@ -16,8 +13,17 @@
             <option>789</option>
         </select>
 
-        <label class="sort-btn" @click="setSortBy">Sort
-            <span>{{ arrow }}</span></label>
+        <fieldset class="sort" @input="setSortVal">
+            <legend @click="setIsAsc">Sort <span> {{ arrow }}</span></legend>
+
+            <input type="radio" id="name" name="drone" value="name" checked>
+            <label for="name"> by name </label>
+
+            <input type="radio" id="price" name="drone" value="price">
+            <label for="price"> by price</label>
+
+        </fieldset>
+
     </section>
 </template>
 
@@ -39,17 +45,22 @@ export default {
     },
     created() {
         this.setFilterBy = utilService.debounce(this.setFilterBy)
-        this.setSortBy()
     },
     methods: {
         setFilterBy() {
             this.$emit('setFilterBy', { ...this.filterBy })
         },
         setSortBy() {
-            // this.$emit('setSortBy', this.sortBy)
             this.$emit('setSortBy', JSON.parse(JSON.stringify(this.sortBy)))
-            this.sortBy.isAsc = !this.sortBy.isAsc
         },
+        setSortVal({ target: { value } }) {
+            this.sortBy.val = value
+            this.setSortBy()
+        },
+        setIsAsc() {
+            this.sortBy.isAsc = !this.sortBy.isAsc
+            this.setSortBy()
+        }
     },
     computed: {
         arrow() {
