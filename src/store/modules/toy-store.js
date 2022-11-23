@@ -22,6 +22,8 @@ export default {
       return state.filterBy.page
     },
     labels(state) {
+      // console.log('got here')
+      // console.log('labels:', state.labels)
       return state.labels
     }
   },
@@ -31,7 +33,10 @@ export default {
       state.totalPages = totalPages
     },
     setLabels(state, labels) {
+      // console.log('labels:', labels)
       state.labels = labels
+      // console.log('labels:', state.labels)
+
     },
     updateToy({ toys }, { toy }) {
       const idx = toys.findIndex((_toy) => _toy._id === toy._id)

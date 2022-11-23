@@ -15,9 +15,9 @@ export default {
 
 <template>
   <userMsg />
-  <header>
+  <header class="app-header">
+    <div class="hero"></div>
     <div class="wrapper">
-
       <nav>
         <RouterLink to="/toy">Our toys</RouterLink> |
         <RouterLink to="/stats">Our Stats</RouterLink> |

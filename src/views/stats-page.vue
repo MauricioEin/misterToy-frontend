@@ -14,6 +14,7 @@ export default {
   },
   computed:{
     labels(){
+      console.log('will get')
       return this.$store.getters.labels
     }
   }

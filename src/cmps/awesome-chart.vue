@@ -5,7 +5,7 @@
   <BarChart v-if="inStockData" :chartData="inStockData" :options="options" />
 </template>
 
-<script lang="ts">
+<script>
 import { BarChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
 import statService from '../services/stat.service.js'

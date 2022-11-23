@@ -1,19 +1,37 @@
 <template>
-  <GoogleMap api-key="AIzaSyDWwJhW2rT_JMvzcZs4BQONHjgACK-Mfbs" style="width: 100%; height: 500px" :center="center" :zoom="15">
-    <Marker :options="{ position: center }" />
+  <GoogleMap api-key="AIzaSyBtz51KaasrXNvngDYG54KYeXypqqKTLJo" style="width: 100%; height: 500px" :center="center"
+    :zoom="11">
+    <Marker v-for="marker in markers" :options="marker" @click="center=marker.position"/>
   </GoogleMap>
 </template>
 
 <script>
-import { defineComponent } from "vue";
 import { GoogleMap, Marker } from "vue3-google-map";
 
-export default defineComponent({
+export default {
   components: { GoogleMap, Marker },
-  setup() {
-    const center = { lat: 40.689247, lng: -74.044502 };
-
-    return { center };
+  data() {
+    return {
+      center: { lat: 32.189247, lng: 34.844502 },
+      markers: {
+        m1: {
+          title: 'Natanya',
+          position: { lat: 32.289247, lng: 34.844502 },
+        },
+        m2: {
+          title: 'Tel Aviv',
+          position: { lat: 32.089247, lng: 34.774502 },
+        },
+        m3: {
+          title: 'Petach Tikva',
+          position: { lat: 32.079247, lng: 34.874502 },
+        },
+        m4: {
+          title: 'Kfar Saba',
+          position: { lat: 32.179247, lng: 34.914502 },
+        },
+      }
+    }
   },
-});
+}
 </script>

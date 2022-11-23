@@ -3,10 +3,10 @@
     <section class="container">
       <toy-filter :toys="toys" @setFilterBy="setFilterBy" @setSortBy="setSortBy"></toy-filter>
       <router-link to="toy/edit/" class="btn m-b-s">Add Toy</router-link>
-      <div class="paging flex align-center space-between m-b-s">
+      <div v-if="totalPages>1" class="paging flex align-center space-between m-b-s">
         <p> Page {{ currPage }} of {{ totalPages }} </p>
-        <button @click="setPage(-1)" v-if="currPage > 1">Prev</button>
-        <button @click="setPage(1)" v-if="currPage < totalPages">Next</button>
+        <button @click="setPage(-1)" :disabled="currPage === 1">Prev</button>
+        <button @click="setPage(1)" :disabled="currPage === totalPages">Next</button>
       </div>
       <toy-list v-if="toys && toys.length" :toys="toys" @toggleToyState="toggleToyState" @removeToy="removeToy">
       </toy-list>
@@ -21,6 +21,9 @@
 import toyList from '../cmps/toy-list.cmp.vue'
 import toyFilter from '../cmps/toy-filter.cmp.vue'
 export default {
+  mounted() {
+    this.$store.dispatch({ type: 'loadToys' })
+  },
   computed: {
     toys() {
       return this.$store.getters.toysForDisplay
@@ -44,6 +47,8 @@ export default {
         })
         .then(() => {
           console.log('TOGGLED')
+          this.$store.dispatch({ type: 'loadToys' })
+
           // this.$store.dispatch({
           //   type: 'setUserActivities',
           //   toy: copyToy,
@@ -63,7 +68,7 @@ export default {
         type: 'setSortBy',
         sortBy,
       })
-      this.$store.dispatch({ type: 'loadToys'})
+      this.$store.dispatch({ type: 'loadToys' })
     },
     removeToy(toyId) {
       this.$store
@@ -72,6 +77,7 @@ export default {
           toyId,
         })
         .then(() => {
+          this.$store.dispatch({ type: 'loadToys' })
           const msg = { txt: 'Toy was succesfully removed', type: 'success' }
           this.$store.commit({ type: 'setMsg', msg })
         })

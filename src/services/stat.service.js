@@ -28,7 +28,6 @@ function getAvgLabelPrice() {
         for (const label in labelMap) {
             avgMap[label] = _.meanBy(labelMap[label], 'price')
         }
-        console.log('avg', avgMap)
         return avgMap
     })
 }
@@ -37,12 +36,10 @@ function getInStockByLabel() {
     return queryByLabels().then(labelMap => {
         const inStockMap = {}
         for (const label in labelMap) {
-            const inStockCount = labelMap[label].reduce(
-                (acc, t) => acc += t.inStock ? 1 : 0, 0)
-            inStockMap[label] = inStockCount / labelMap[label].length
+            inStockMap[label] = labelMap[label].reduce(
+                (acc, toy) => acc += toy.inStock ?
+                    1 / labelMap[label].length * 100 : 0, 0)
         }
-        console.log('inStock', inStockMap)
-
         return inStockMap
     })
 
