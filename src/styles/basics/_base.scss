@@ -1,0 +1,151 @@
+.btn{
+    background-color: $clr1;
+    color: $clr3;
+    border-radius: 8px;
+    padding: 5px 15px;
+    border-width: 0;
+    cursor: pointer;
+    width:fit-content;
+    box-shadow: 0 2px 4px rgba(67, 67, 67, 0.371);
+
+    &.page-btn{
+        background-color: $clr3;
+        color:$clr1;
+    }
+
+    &.disabled{
+        cursor:default;
+        opacity:50%;
+    }
+
+    &.del-btn{
+        background-color: rgb(231, 96, 125);
+        color:$clr0;
+    }
+
+    &:hover{
+        box-shadow: 0 2px 4px rgba(67, 67, 67, 0.671);
+
+    }
+}
+
+
+
+
+::selection {
+    background-color: $clr1;
+    color: $clr3;
+}
+
+* {
+    box-sizing: border-box;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+html { 
+//    font-family: Bahnschrift, sans-serif; 
+   color: $clr5;
+   line-height: 1.8;
+   line-height: lh(26px);
+
+//    @media (max-width: 1300px) {
+//        font-size: 13px;
+//    }
+}
+
+body {
+    margin: 0;
+    background-color: $clr4;
+
+    // @include for-normal-layout {
+    //     &.sidebar-open {
+    //         overflow: hidden;
+    //     }
+    // }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin: 0 0 1rem;
+    line-height: lh(40px, 29px);
+}
+
+// h1 {
+//     font-size: rem(60px);
+// }
+
+// h2 {
+//     font-size: em(16px);
+//     margin: em(63px) 0;
+//     grid-area: title;
+//     color: $clr1;
+//     text-transform: uppercase;
+//     @include type(boldCondensed);
+// }
+
+// h3 {
+//     font-size: em(29px);
+// }
+
+img {
+    width: 100%;
+}
+
+// p {
+//     margin: 0 0 1em;
+//     max-width: 60ch;
+//     @include type(light);
+//     .main-text & {
+//         grid-column: 3 / 6;
+//         font-size: rem(22px);
+//         line-height: 1.384615;
+//         padding-inline-start: rem(30px);
+//         position: relative;
+        
+//         &::after {
+//             content: "";
+//             position: absolute;
+//             display: block;
+//             top: 0;
+//             left: 0;
+//             width: 8px;
+//             height: 100%;
+//             max-height: 42px;
+//             background-color: $clr1;
+            
+//             @include for-wide-layout {
+//                 width: 10px;
+//             }
+//         }
+        
+//         @include for-wide-layout {
+//             grid-column: 3 / 5;
+//             font-size: rem(26px);
+//         }
+//     }
+// }
+
+// .btn {
+//     @include btn;
+    
+//     &-dark {
+//         @include btn($type: dark);
+//     }
+    
+//     &-light {
+//         @include btn($type: light);
+//     }
+// }
+
+
+// links
+a {
+    color: $clr1;
+
+    &.active {
+        background-color: $clr1;
+        color: $clr2;
+    }
+}
+
+

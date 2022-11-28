@@ -5,10 +5,10 @@ import {store} from './store/store.js'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
-import './assets/main.css'
+// import './assets/main.css'
 
 // Styles
-// import './styles/styles.scss'
+import './styles/styles.scss'
 
 const app = createApp(App)
 

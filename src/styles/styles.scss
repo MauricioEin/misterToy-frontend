@@ -5,19 +5,22 @@
 // @import 'setup/functions';
 
 // // BASICS
-// @import 'basics/helpers';
-// @import 'basics/base';
-// @import 'basics/layout';
+@import 'basics/helpers';
+@import 'basics/base';
+@import 'basics/layout';
 
 // // COMPONENTS
 @import 'components/app-header';
-// @import 'components/teaser';
+@import 'components/sort-filter';
+@import 'components/dashboard';
+@import 'components/login-signup';
 // @import 'components/pager';
 // @import 'components/news';
-// @import 'components/cards';
-// @import 'components/sidebar';
+@import 'components/toy-list';
+@import 'components/toy-details';
+@import 'components/user-msg';
 
 body{
-    background-color: $clr1;
+    background-color: $clr4;
 }
 

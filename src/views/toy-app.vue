@@ -2,17 +2,17 @@
   <main>
     <section class="container">
       <toy-filter :toys="toys" @setFilterBy="setFilterBy" @setSortBy="setSortBy"></toy-filter>
-      <router-link to="toy/edit/" class="btn m-b-s">Add Toy</router-link>
-      <div v-if="totalPages>1" class="paging flex align-center space-between m-b-s">
+      <router-link to="toy/edit/" class="btn add-btn">Add a toy</router-link>
+      <div v-if="totalPages > 1" class="paging flex space-between">
+        <button class="btn page-btn" @click="setPage(-1)" :class="{disabled: currPage === 1}">Prev</button>
         <p> Page {{ currPage }} of {{ totalPages }} </p>
-        <button @click="setPage(-1)" :disabled="currPage === 1">Prev</button>
-        <button @click="setPage(1)" :disabled="currPage === totalPages">Next</button>
+        <button class="btn page-btn" @click="setPage(1)" :class="{disabled: currPage === totalPages}">Next</button>
       </div>
       <toy-list v-if="toys && toys.length" :toys="toys" @toggleToyState="toggleToyState" @removeToy="removeToy">
       </toy-list>
       <h2 v-else-if="toys" class="indicator">No matches found</h2>
-      <!-- <h2 class="indicator" v-else >Loading...</h2> -->
-      <div v-else class="skeleton-uesfg2nbuh7"></div>
+      <h2 class="indicator" v-else>Loading...</h2>
+      <!-- <div v-else class="skeleton-uesfg2nbuh7"></div> -->
     </section>
   </main>
 </template>
@@ -37,24 +37,17 @@ export default {
     }
   },
   methods: {
-    toggleToyState(toy) {
+    async toggleToyState(toy) {
       const copyToy = JSON.parse(JSON.stringify(toy))
       copyToy.inStock = !copyToy.inStock
-      this.$store
-        .dispatch({
-          type: 'saveToy',
-          toy: copyToy,
-        })
-        .then(() => {
-          console.log('TOGGLED')
-          this.$store.dispatch({ type: 'loadToys' })
+      await this.$store.dispatch({ type: 'saveToy', toy: copyToy, })
+      this.$store.dispatch({ type: 'loadToys' })
 
-          // this.$store.dispatch({
-          //   type: 'setUserActivities',
-          //   toy: copyToy,
-          //   txt: `Toy was set as ${copyToy.inStock ? 'in stock' : 'completed'}`,
-          // })
-        })
+      // this.$store.dispatch({
+      //   type: 'setUserActivities',
+      //   toy: copyToy,
+      //   txt: `Toy was set as ${copyToy.inStock ? 'in stock' : 'completed'}`,
+      // })
     },
     setFilterBy(filterBy) {
       this.$store.commit({
@@ -70,17 +63,11 @@ export default {
       })
       this.$store.dispatch({ type: 'loadToys' })
     },
-    removeToy(toyId) {
-      this.$store
-        .dispatch({
-          type: 'removeToy',
-          toyId,
-        })
-        .then(() => {
-          this.$store.dispatch({ type: 'loadToys' })
-          const msg = { txt: 'Toy was succesfully removed', type: 'success' }
-          this.$store.commit({ type: 'setMsg', msg })
-        })
+    async removeToy(toyId) {
+      await this.$store.dispatch({ type: 'removeToy', toyId, })
+      this.$store.dispatch({ type: 'loadToys' })
+      const msg = { txt: 'Toy was succesfully removed', type: 'success' }
+      this.$store.commit({ type: 'setMsg', msg })
     },
     setPage(diff) {
       this.$store.commit({ type: 'setPage', diff })

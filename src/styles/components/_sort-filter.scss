@@ -1,0 +1,26 @@
+.toy-filter,
+.toy-sort {
+    max-width: 350px;
+    height: fit-content;
+}
+
+.toy-sort {
+    transform: translateY(-12px);
+    border-color: $clr1;
+}
+
+.sort-filter-container {
+    @media (max-width: $padded-break-narrow) {
+
+        flex-direction: column;
+        align-items: center;
+
+        .toy-filter-form>* {
+            display: inline-block;
+            width: 200px;
+            max-width: 100%;
+        }
+    }
+}
+
+

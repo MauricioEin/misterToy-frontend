@@ -1,0 +1,40 @@
+.toy-details-container>*{
+margin-bottom: 0;
+}
+
+.toy-msg {
+    background-color: $clr6;
+    padding: 0 20px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+
+    h4 {
+        margin-bottom: 0;
+        font-weight: bold;
+
+        span {
+            font-weight: normal;
+        }
+    }
+}
+.reviews-container{
+    text-align: center;
+}
+.review-list{
+    gap:20px;
+    flex-wrap:wrap;
+
+    li{
+        padding:10px 10px 0;
+        border-radius: 8px;
+        background-color: $clr3;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.307);
+        text-align: center;
+        width:fit-content;
+
+        pre{
+            font-weight: bold;
+            font-family: serif;
+        }
+    }
+}

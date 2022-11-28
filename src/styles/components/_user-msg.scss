@@ -1,0 +1,13 @@
+.user-msg{
+    position:fixed;
+    background-color: whitesmoke;
+    z-index:10;
+    padding: 0 10px 10px;
+    border-radius: 10px;
+    border-start-start-radius: 0;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.42);
+
+    &.success{
+        background-color: rgb(92, 203, 255);
+    }
+}

@@ -1,0 +1,26 @@
+
+.paging p {
+    margin:0;
+}
+
+.paging{
+    margin-top:10px;
+}
+
+.toy-list{
+    display: grid;
+    gap:20px;
+    grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+padding-top: 10px;
+}
+
+.toy-preview{
+    background-color:lighten($clr3,15);
+    padding:10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px 2px rgba(134, 129, 129, 0.382);
+}
+
+.preview-name{
+    line-height: 120%;
+}

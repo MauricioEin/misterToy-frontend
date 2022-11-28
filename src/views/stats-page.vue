@@ -12,11 +12,5 @@ export default {
     return {
     }
   },
-  computed:{
-    labels(){
-      console.log('will get')
-      return this.$store.getters.labels
-    }
-  }
 }
 </script>

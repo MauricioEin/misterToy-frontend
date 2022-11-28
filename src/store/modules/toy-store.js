@@ -1,11 +1,12 @@
 import toyService from '../../services/toy.service.js'
 import statService from '../../services/stat.service.js'
+// import { id } from 'element-plus/es/locale/index.js'
 
 
 export default {
   state: {
     toys: null,
-    filterBy: { status: 'All', name: '', page: 0, pageSize: 3 },
+    filterBy: { status: 'All', name: '', page: 0, pageSize: 5 },
     sortBy: { val: 'name', isAsc: true },
     totalPages: 0,
     labels: []
@@ -28,14 +29,13 @@ export default {
     }
   },
   mutations: {
-    setToys(state, { totalPages, filteredToys: toys }) {
+    setToys(state, { totalPages, toys }) {
       state.toys = toys
       state.totalPages = totalPages
     },
     setLabels(state, labels) {
       // console.log('labels:', labels)
       state.labels = labels
-      // console.log('labels:', state.labels)
 
     },
     updateToy({ toys }, { toy }) {
@@ -47,12 +47,11 @@ export default {
       toys.splice(idx, 1, toy)
     },
     addToy({ toys }, { toy }) {
-      console.log('Adding!!')
       toys.push(toy)
     },
     setFilterBy(state, { filterBy }) {
       state.filterBy = { ...state.filterBy, ...filterBy, page: 0 }
-
+      if (!filterBy.pageSize) state.filterBy.pageSize = 4
     },
     setSortBy(state, { sortBy }) {
       state.sortBy = sortBy
@@ -68,37 +67,42 @@ export default {
       }
       toys.splice(idx, 1)
     },
+    addToyMsg(state, { newMsg, toyId }) {
+      const currToy = state.toys.find(toy => toy._id === toyId)
+      currToy.msgs = currToy.msgs ? [...currToy.msgs, newMsg] : [newMsg]
+    }
   },
   actions: {
-    loadToys({ commit, state }) {
-      toyService.query(state.filterBy, state.sortBy).then((toysAndPages) => {
-        commit('setToys', toysAndPages)
-      })
+    async loadToys({ commit, state }) {
+      const toysAndPages = await toyService.query(state.filterBy, state.sortBy)
+
+      commit('setToys', toysAndPages)
     },
-    loadLabels({ commit }) {
-      toyService.getLabels().then(labels => {
-        commit('setLabels', labels)
-        statService.getAvgLabelPrice()
-        statService.getInStockByLabel()
-      })
+    async loadLabels({ commit }) {
+      const labels = await toyService.getLabels()
+      commit('setLabels', labels)
+      statService.getAvgLabelPrice()
+      statService.getInStockByLabel()
     },
-    saveToy({ commit }, { toy }) {
-      console.log('Saving')
+    async saveToy({ commit }, { toy }) {
       const isEdit = toy._id
-      return toyService.save(toy).then((toy) => {
-        const type = isEdit ? 'updateToy' : 'addToy'
-        commit({ type, toy })
-      })
+      const savedToy = await toyService.save(toy)
+      const type = isEdit ? 'updateToy' : 'addToy'
+      commit({ type, toy: savedToy })
     },
-    removeToy({ commit, dispatch }, { toyId }) {
-      console.log('Store remove toyId', toyId)
-      return toyService.remove(toyId).then((removedToy) => {
-        commit({ type: 'removeToy', toyId })
-        // dispatch({ type: 'setUserActivities', txt: 'Toy was removed', toy: removedToy })
-      })
+    async removeToy({ commit, dispatch }, { toyId }) {
+      await toyService.remove(toyId)
+      commit({ type: 'removeToy', toyId })
+      // dispatch({ type: 'setUserActivities', txt: 'Toy was removed', toy: removedToy })
     },
     getToyById(context, { toyId }) {
       return toyService.getById(toyId)
     },
+    async addToyMsg({ commit, getters }, { msg, toyId }) {
+      const loggedInUser = { ...getters.loggedInUser }
+      var newMsg = { txt: msg, by: loggedInUser }
+      newMsg = await toyService.addToyMsg(newMsg, toyId)
+      commit({ type: 'addToyMsg', newMsg, toyId })
+    }
   },
 }

@@ -1,26 +1,17 @@
 
-
 <template>
-    <section class="toy-filter-container m-b-s">
-        <!-- <h1>Filter</h1>
-        <input type="text" v-model="filterBy.name" @input="setFilterBy" />
-        <select v-model="filterBy.status" @change="setFilterBy">
-            <option v-for="option in options" :key="option">{{ option }}</option>
-        </select> -->
-
-
-
-        <section class="toy-filter-container m-b-s">
-            <h1>Filter toys:</h1>
+    <section class="sort-filter-container flex justify-center">
+        <section class="toy-filter">
+            <!-- <h1>Filter toys:</h1> -->
             <el-form :inline="true" :model="filterBy" class="toy-filter-form">
                 <el-form-item>
-                    <el-input @input="setFilterBy" v-model="filterBy.name" placeholder="Toy name" />
-                    <el-select @change="setFilterBy" v-model="filterBy.status" placeholder="Stock status">
+                    <el-input @input="setFilterBy" v-model="filterBy.name" placeholder="Toy name" style="width: 340px"/>
+                    <el-select @change="setFilterBy" v-model="filterBy.status" placeholder="Stock status" style="width: 140px">
                         <el-option v-for="opt in stockOpts" :label="opt" :value="opt" />
                     </el-select>
                     <div style="display: inline-block">
                         <el-select @change="setFilterBy" v-model="filterBy.labels" multiple collapse-tags
-                            collapse-tags-tooltip placeholder="Labels" style="width: 240px">
+                            collapse-tags-tooltip placeholder="Labels" style="width: 200px">
                             <el-option v-for="item in labels" :key="item" :label="item"
                                 :value="item" />
                         </el-select>
@@ -35,8 +26,8 @@
 
 
 
-        <fieldset class="sort" @input="setSortVal">
-            <legend @click="setIsAsc">Sort <span> {{ arrow }}</span></legend>
+        <fieldset class="toy-sort" @input="setSortVal">
+            <legend @click="setIsAsc" class="pointer">Sort <span> {{ arrow }}</span></legend>
 
             <input type="radio" id="name" name="drone" value="name" checked>
             <label for="name"> by name </label>
@@ -67,8 +58,6 @@ export default {
             labels: [ 'On wheels', 'Box game', 'Art', 'Baby', 'Doll', 'Puzzle', 'Outdoor', 'Battery powered' ]
         }
     },
-    computed: {
-    },
     created() {
         this.setFilterBy = utilService.debounce(this.setFilterBy)
     },
@@ -90,7 +79,7 @@ export default {
     },
     computed: {
         arrow() {
-            return this.sortBy.isAsc ? '⬇' : '⬆'
+            return this.sortBy.isAsc ? '⬆' : '⬇'
         },
     },
 }
